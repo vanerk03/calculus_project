@@ -23,7 +23,6 @@ class LinearRegressor(BaseRegressor):
         # prolly add decaying learning rate
 
     def _calc_loss(self, X, y):
-        # for now I think mse is viable, although I begin to doubt it as I'm writing this))))
         return np.sum(np.abs(X @ self.w.T - y)) + self._l1 * np.sum(np.abs(self.w)) + self._l2 * np.sum(np.square(self.w))
 
     def _calc_grad(self, X, y):
@@ -46,16 +45,16 @@ class LinearRegressor(BaseRegressor):
         return grad / X.shape[0] / h / 2
 
     def _step(self, X, y):
-        print("grad:\n", self._calc_grad(X, y))
+        # print("grad:\n", self._calc_grad(X, y))
         self.w -= self._lr * self._calc_grad(X, y)
         
     def fit_predict(self, X, y):
         prev_loss = np.inf
         for _ in range(self._max_iter):
             self._step(X, y)
-            print("coef:\n", self.w)
+            # print("coef:\n", self.w)
             loss = self._calc_loss(X, y)
-            print(f"loss:\n {loss: .4f}")
+            print(f"loss: {loss: .4f}")
             if abs(loss - prev_loss) < self._tolerance:
                 break
             prev_loss = loss
